@@ -1,9 +1,9 @@
 package pgDev.bukkit.RedstoneCommandSigns;
 
+import org.bukkit.command.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class RCSMain extends JavaPlugin {
@@ -18,7 +18,11 @@ public class RCSMain extends JavaPlugin {
         System.out.println( pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!" );
 	}
 	
-	public void onDisable(){
+	public void onDisable() {
 		System.out.println("RedstoneCommandSigns disabled!");
+	}
+	
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)  {
+		return true;
 	}
 }
