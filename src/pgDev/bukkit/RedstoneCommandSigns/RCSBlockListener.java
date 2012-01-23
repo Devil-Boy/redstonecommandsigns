@@ -1,5 +1,10 @@
 package pgDev.bukkit.RedstoneCommandSigns;
 
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockRedstoneEvent;
@@ -12,10 +17,71 @@ public class RCSBlockListener extends BlockListener {
 	}
 	
 	public void onBlockRedstoneChange(BlockRedstoneEvent event) {
-    	
+    	if (isSign(event.getBlock()) && event.getBlock().isBlockPowered()) {
+    		Sign theSign = (Sign) event.getBlock();
+    		if (isRCS(theSign)) {
+    			String signText = theSign.getLine(1) + theSign.getLine(2) + theSign.getLine(3);
+    			if (theSign.getLine(0).endsWith(ChatColor.BLUE.toString())) {
+    				if (plugin.hcsDB != null) {
+    					for (String cmd : plugin.hcsDB.get(signText).commands) {
+    						runCommand(signText);
+    					}
+    				}
+    			} else {
+    				runCommand(signText);
+    			}
+    		}
+    	}
     }
 	
-	public void onBlockDamage(BlockDamageEvent event) {
-		
+	public void runCommand(String commandString) {
+		if (commandString.startsWith("/")) {
+			commandString = commandString.substring(1);
+		}
+		plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), commandString);
 	}
+	
+	public void onBlockDamage(BlockDamageEvent event) {
+		Player player = event.getPlayer();
+    	String name = player.getName();
+    	
+    	if (plugin.signConverters.contains(name)) {
+    		if (isSign(event.getBlock())) {
+    			Sign theSign = (Sign)event.getBlock().getState();
+    			if (isNonRCS(theSign)) {
+    				theSign.setLine(0, theSign.getLine(0).replace(ChatColor.GREEN.toString(), ChatColor.RED.toString()));
+					theSign.update();
+					if (theSign.getLine(0).endsWith(ChatColor.BLUE.toString())) {
+						String signText = theSign.getLine(1) + theSign.getLine(2) + theSign.getLine(3);
+						player.sendMessage(ChatColor.GOLD + "RedstoneCommandSign created with " + plugin.hcsDB.get(signText).commands.length + " commands.");
+					} else {
+						player.sendMessage(ChatColor.GOLD + "RedstoneCommandSign created!");
+					}
+    			} else if (isRCS(theSign)) {
+    				player.sendMessage(ChatColor.RED + "That sign is already a redstone commandsign.");
+    			} else {
+    				player.sendMessage(ChatColor.RED + "That is not a commandsign.");
+    			}
+    		} else {
+    			player.sendMessage(ChatColor.RED + "That block is not a sign.");
+    		}
+    	}
+	}
+	
+	public boolean isSign(Block theBlock) {
+    	if (theBlock.getType() == Material.SIGN_POST || theBlock.getType() == Material.WALL_SIGN) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
+	
+	
+	public boolean isNonRCS(Sign mrSign) {
+    	return mrSign.getLine(0).startsWith(ChatColor.GREEN + plugin.scsID);
+    }
+    
+    public boolean isRCS(Sign mrSign) {
+    	return mrSign.getLine(0).startsWith(ChatColor.RED + plugin.scsID);
+    }
 }

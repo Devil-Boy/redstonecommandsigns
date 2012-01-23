@@ -16,11 +16,6 @@ commands:
       usage: /<command>
 
 permissions:
-    rcs.*:
-        default: op
-        description: Gives access to all Redstone Command Signs usage.
-        children:
-            rcs.create: true
     rcs.create:
         default: op
         description: Can create a redstone command sign.
