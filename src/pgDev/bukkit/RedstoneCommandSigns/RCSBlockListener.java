@@ -2,12 +2,9 @@ package pgDev.bukkit.RedstoneCommandSigns;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
+import org.bukkit.block.*;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockDamageEvent;
-import org.bukkit.event.block.BlockListener;
-import org.bukkit.event.block.BlockRedstoneEvent;
+import org.bukkit.event.block.*;
 
 public class RCSBlockListener extends BlockListener {
 	private final RCSMain plugin;
@@ -18,7 +15,7 @@ public class RCSBlockListener extends BlockListener {
 	
 	public void onBlockRedstoneChange(BlockRedstoneEvent event) {
     	if (isSign(event.getBlock()) && event.getBlock().isBlockPowered()) {
-    		Sign theSign = (Sign) event.getBlock();
+    		Sign theSign = (Sign) event.getBlock().getState();
     		if (isRCS(theSign)) {
     			String signText = theSign.getLine(1) + theSign.getLine(2) + theSign.getLine(3);
     			if (theSign.getLine(0).endsWith(ChatColor.BLUE.toString())) {
@@ -49,7 +46,7 @@ public class RCSBlockListener extends BlockListener {
     		if (isSign(event.getBlock())) {
     			Sign theSign = (Sign)event.getBlock().getState();
     			if (isNonRCS(theSign)) {
-    				theSign.setLine(0, theSign.getLine(0).replace(ChatColor.GREEN.toString(), ChatColor.RED.toString()));
+    				theSign.setLine(0, theSign.getLine(0).replace(ChatColor.GREEN.toString(), ChatColor.DARK_RED.toString()));
 					theSign.update();
 					if (theSign.getLine(0).endsWith(ChatColor.BLUE.toString())) {
 						String signText = theSign.getLine(1) + theSign.getLine(2) + theSign.getLine(3);
@@ -82,6 +79,6 @@ public class RCSBlockListener extends BlockListener {
     }
     
     public boolean isRCS(Sign mrSign) {
-    	return mrSign.getLine(0).startsWith(ChatColor.RED + plugin.scsID);
+    	return mrSign.getLine(0).startsWith(ChatColor.DARK_RED + plugin.scsID);
     }
 }
