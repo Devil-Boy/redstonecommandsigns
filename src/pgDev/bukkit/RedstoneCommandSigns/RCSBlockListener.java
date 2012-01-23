@@ -48,6 +48,7 @@ public class RCSBlockListener extends BlockListener {
     			if (isNonRCS(theSign)) {
     				theSign.setLine(0, theSign.getLine(0).replace(ChatColor.GREEN.toString(), ChatColor.DARK_RED.toString()));
 					theSign.update();
+					plugin.signConverters.remove(name);
 					if (theSign.getLine(0).endsWith(ChatColor.BLUE.toString())) {
 						String signText = theSign.getLine(1) + theSign.getLine(2) + theSign.getLine(3);
 						player.sendMessage(ChatColor.GOLD + "RedstoneCommandSign created with " + plugin.hcsDB.get(signText).commands.length + " commands.");
