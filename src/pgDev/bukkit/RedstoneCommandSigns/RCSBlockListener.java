@@ -24,7 +24,7 @@ public class RCSBlockListener extends BlockListener {
     			if (theSign.getLine(0).endsWith(ChatColor.BLUE.toString())) {
     				if (plugin.hcsDB != null) {
     					for (String cmd : plugin.hcsDB.get(signText).commands) {
-    						runCommand(signText);
+    						runCommand(cmd);
     					}
     				}
     			} else {
