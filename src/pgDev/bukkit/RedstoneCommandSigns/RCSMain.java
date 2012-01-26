@@ -35,8 +35,7 @@ public class RCSMain extends JavaPlugin {
 			setupPermissions();
 			
 			PluginManager pm = getServer().getPluginManager();
-			pm.registerEvent(Event.Type.BLOCK_DAMAGE, blockListener, Priority.Normal, this);
-	        pm.registerEvent(Event.Type.REDSTONE_CHANGE, blockListener, Priority.Normal, this);
+			pm.registerEvents(blockListener, this);
 			
 			PluginDescriptionFile pdfFile = this.getDescription();
 	        System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!" );

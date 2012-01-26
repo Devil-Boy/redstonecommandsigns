@@ -4,15 +4,18 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.*;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 
-public class RCSBlockListener extends BlockListener {
+public class RCSBlockListener implements Listener {
 	private final RCSMain plugin;
 	
 	public RCSBlockListener(RCSMain pluginI) {
 		plugin = pluginI;
 	}
 	
+	@EventHandler
 	public void onBlockRedstoneChange(BlockRedstoneEvent event) {
     	if (isSign(event.getBlock()) && event.getBlock().isBlockPowered()) {
     		Sign theSign = (Sign) event.getBlock().getState();
@@ -38,6 +41,7 @@ public class RCSBlockListener extends BlockListener {
 		plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), commandString);
 	}
 	
+	@EventHandler
 	public void onBlockDamage(BlockDamageEvent event) {
 		Player player = event.getPlayer();
     	String name = player.getName();
